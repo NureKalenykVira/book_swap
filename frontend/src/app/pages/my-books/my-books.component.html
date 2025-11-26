@@ -1,0 +1,198 @@
+<section class="my-books-page">
+  <h1 class="page-title">My books</h1>
+
+  <!-- If wallet is not connected -->
+  <div *ngIf="!account" class="card">
+    <p class="card-text">
+      To manage your books in BookSwap Club, please connect your Ethereum wallet
+      (MetaMask) to the Sepolia test network.
+    </p>
+
+    <button class="btn primary" (click)="connectWalletFromPage()">
+      Connect wallet
+    </button>
+  </div>
+
+  <!-- Main content when wallet is connected -->
+  <div *ngIf="account" class="cards-grid">
+    <!-- Swap market permissions -->
+    <div class="card">
+      <h2 class="form-title">Swap market permissions</h2>
+      <p class="card-text">
+        To allow the Swap Market contract to transfer your book NFTs during a
+        swap, you must enable permissions once. This does not transfer any
+        books by itself, it only allows swaps you confirm.
+      </p>
+
+      <div class="status success" *ngIf="marketApproved === true">
+        Swap market is already enabled for your books.
+      </div>
+
+      <button
+        class="btn secondary"
+        type="button"
+        (click)="enableMarket()"
+        *ngIf="marketApproved !== true"
+      >
+        Enable swap market for my books
+      </button>
+    </div>
+
+    <!-- Mint form -->
+    <div class="card">
+      <h2 class="form-title">Add a new book</h2>
+
+      <form
+        [formGroup]="mintForm"
+        (ngSubmit)="submitMint()"
+        class="mint-form"
+      >
+        <div class="field">
+          <label for="title">Book title</label>
+          <input id="title" type="text" formControlName="title" />
+          <div class="error" *ngIf="f['title'].touched && f['title'].invalid">
+            Title is a required field.
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="author">Author</label>
+          <input id="author" type="text" formControlName="author" />
+          <div class="error" *ngIf="f['author'].touched && f['author'].invalid">
+            Author is a required field.
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="genre">Genre</label>
+          <input id="genre" type="text" formControlName="genre" />
+          <div class="error" *ngIf="f['genre'].touched && f['genre'].invalid">
+            Genre is a required field.
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="description">Description</label>
+          <textarea
+            id="description"
+            rows="3"
+            formControlName="description"
+          ></textarea>
+          <div
+            class="error"
+            *ngIf="f['description'].touched && f['description'].invalid"
+          >
+            Description is a required field.
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="metadataURI">Cover image URL (optional)</label>
+          <input
+            id="metadataURI"
+            type="text"
+            formControlName="metadataURI"
+            placeholder="https://..."
+          />
+        </div>
+
+        <button class="btn primary" type="submit" [disabled]="submitting">
+          Add book
+        </button>
+      </form>
+    </div>
+
+    <!-- Load book by tokenId + list -->
+    <div class="card">
+      <h2 class="form-title">View book by tokenId</h2>
+
+      <div class="field inline">
+        <input
+          type="number"
+          min="1"
+          placeholder="For example: 1"
+          [(ngModel)]="lookupId"
+          name="lookupId"
+        />
+        <button class="btn secondary" (click)="loadBookById()">
+          Load
+        </button>
+      </div>
+
+      <h3 style="margin-left: 290px">or</h3>
+
+      <div class="field inline" style="margin-bottom: 12px;">
+        <button class="btn secondary" type="button" (click)="loadMyBooksAuto()">
+          Load all my books
+        </button>
+      </div>
+
+      <div class="status" *ngIf="loadingBook">
+        Loading book data from blockchain...
+      </div>
+
+      <div class="status" *ngIf="statusMessage && !loadingBook">
+        {{ statusMessage }}
+      </div>
+      <div class="status error" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+
+      <div class="books-list" *ngIf="books.length > 0">
+        <div class="book-card" *ngFor="let b of books">
+          <div class="book-card__cover">
+            <div class="book-cover" *ngIf="b.metadataURI; else noCover">
+              <img
+                [src]="b.metadataURI"
+                alt="Book cover"
+                class="book-cover__img"
+              />
+            </div>
+
+            <ng-template #noCover>
+              <div class="book-cover book-cover--empty">
+                No cover
+              </div>
+            </ng-template>
+          </div>
+
+          <div class="book-card__content">
+            <div class="book-header">
+              <div class="book-title">
+                {{ b.title }} <span class="token-id">#{{ b.tokenId }}</span>
+              </div>
+              <div class="book-author">{{ b.author }}</div>
+            </div>
+
+            <div class="book-meta">
+              <span class="badge">{{ b.genre }}</span>
+            </div>
+
+            <p class="book-description">
+              {{ b.description }}
+            </p>
+
+            <div class="book-footer">
+              <div class="owner">
+                Owner: {{ b.owner }}
+              </div>
+            </div>
+
+            <button
+              class="btn secondary"
+              (click)="createOfferForBook(b.tokenId)"
+              style="margin-top: 8px;"
+            >
+              Create swap offer
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <p class="hint" *ngIf="books.length === 0 && !loadingBook">
+        No books have been loaded yet. After minting, you can use a known
+        tokenId to view its data here.
+      </p>
+    </div>
+  </div>
+</section>

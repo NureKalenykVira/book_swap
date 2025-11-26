@@ -147,8 +147,59 @@ contract SwapMarket {
         emit SwapCompleted(offer.id, req.id, offer.owner, req.requester);
     }
 
+    /// @notice Отримати офер за ідентифікатором (зручно для фронту)
+    function getOffer(uint256 offerId) external view returns (SwapOffer memory) {
+        return offers[offerId];
+    }
+
+    /// @notice Отримати запит за ідентифікатором (зручно для фронту)
+    function getRequest(uint256 requestId) external view returns (SwapRequest memory) {
+        return requests[requestId];
+    }
+
     /// @notice Отримати список ідентифікаторів запитів для оферу
     function getRequestsForOffer(uint256 offerId) external view returns (uint256[] memory) {
         return offerRequests[offerId];
+    }
+
+    /// @notice Отримати всі офери (можна фільтрувати активні на фронті)
+    function getAllOffers() external view returns (SwapOffer[] memory) {
+        uint256 total = _nextOfferId;
+        SwapOffer[] memory result = new SwapOffer[](total);
+
+        for (uint256 i = 1; i <= total; i++) {
+            result[i - 1] = offers[i];
+        }
+
+        return result;
+    }
+
+    /// @notice Отримати всі офери, створені конкретним користувачем
+    function getOffersByOwner(address owner)
+        external
+        view
+        returns (SwapOffer[] memory)
+    {
+        uint256 total = _nextOfferId;
+        uint256 count = 0;
+
+        // рахуємо кількість оферів власника
+        for (uint256 i = 1; i <= total; i++) {
+            if (offers[i].owner == owner) {
+                count++;
+            }
+        }
+
+        SwapOffer[] memory result = new SwapOffer[](count);
+        uint256 idx = 0;
+
+        for (uint256 i = 1; i <= total; i++) {
+            if (offers[i].owner == owner) {
+                result[idx] = offers[i];
+                idx++;
+            }
+        }
+
+        return result;
     }
 }

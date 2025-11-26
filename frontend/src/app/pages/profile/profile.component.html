@@ -1,0 +1,78 @@
+<section class="profile-page">
+  <h1 class="page-title">Profile</h1>
+
+  <div *ngIf="!account" class="card">
+    <p class="card-text">
+      To use BookSwap Club, connect your Ethereum wallet (MetaMask)
+      to the Sepolia test network.
+    </p>
+
+    <button class="btn primary" (click)="connectWalletFromPage()">
+      Connect wallet
+    </button>
+  </div>
+
+  <div *ngIf="account" class="card">
+    <div class="wallet-row">
+      <span class="label">Connected wallet:</span>
+      <span class="address">{{ account }}</span>
+    </div>
+
+    <div *ngIf="loadingProfile" class="status">
+      Loading profile from the blockchain...
+    </div>
+
+    <form
+      *ngIf="!loadingProfile"
+      [formGroup]="form"
+      (ngSubmit)="submit()
+      "
+      class="profile-form"
+    >
+      <h2 class="form-title" *ngIf="!isRegistered">
+        Register in BookSwap Club
+      </h2>
+      <h2 class="form-title" *ngIf="isRegistered">
+        Update profile
+      </h2>
+
+      <div class="field">
+        <label for="nickname">Nickname</label>
+        <input id="nickname" type="text" formControlName="nickname" />
+        <div class="error" *ngIf="f['nickname'].touched && f['nickname'].invalid">
+          Nickname is required.
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="city">City</label>
+        <input id="city" type="text" formControlName="city" />
+        <div class="error" *ngIf="f['city'].touched && f['city'].invalid">
+          City is required.
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="favoriteGenres">Favorite genres</label>
+        <textarea
+          id="favoriteGenres"
+          rows="3"
+          formControlName="favoriteGenres"
+          placeholder="For example: fantasy, non-fiction, detective..."
+        ></textarea>
+      </div>
+
+      <button
+        class="btn primary"
+        type="submit"
+        [disabled]="submitting"
+      >
+        {{ isRegistered ? 'Update profile' : 'Register' }}
+      </button>
+
+      <div class="status" *ngIf="statusMessage">
+        {{ statusMessage }}
+      </div>
+    </form>
+  </div>
+</section>

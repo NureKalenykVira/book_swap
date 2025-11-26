@@ -1,0 +1,99 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  padding: 0 24px;
+  background: rgba(10, 10, 20, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 10;
+}
+
+.header__left {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.logo-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #6a5acd, #42a5f5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.logo-text {
+  margin-left: 10px;
+}
+
+.logo-title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.logo-subtitle {
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+.header__nav {
+  display: flex;
+  gap: 8px;
+}
+
+.nav-link {
+  border: none;
+  background: transparent;
+  color: #d0d0ff;
+  font-size: 14px;
+  padding: 10px 25px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.nav-link--active,
+.nav-link:hover {
+  background: rgba(106, 90, 205, 0.25);
+  color: #ffffff;
+}
+
+.header__right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.wallet-btn {
+  border-radius: 999px;
+  padding: 10px 25px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(135deg, #6a5acd, #42a5f5);
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.wallet-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.wallet-address {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco;
+}

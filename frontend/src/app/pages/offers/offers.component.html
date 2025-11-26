@@ -1,0 +1,156 @@
+<section class="offers-page">
+  <h1 class="page-title">Swap offers</h1>
+
+  <!-- If wallet is not connected -->
+  <div *ngIf="!account" class="card">
+    <p class="card-text">
+      To view and work with swap offers, please connect your Ethereum wallet
+      (MetaMask) to the Sepolia test network.
+    </p>
+    <button class="btn primary" (click)="connectWalletFromPage()">
+      Connect wallet
+    </button>
+  </div>
+
+  <!-- Main content when account exists -->
+  <div *ngIf="account" class="card">
+    <div class="wallet-row">
+      <span class="label">Connected wallet:</span>
+      <span class="address">{{ account }}</span>
+    </div>
+
+    <div class="find-offer">
+      <div class="field">
+        <label for="offerId">Offer ID</label>
+        <input
+          id="offerId"
+          type="number"
+          [(ngModel)]="offerIdInput"
+          placeholder="For example: 1"
+        />
+      </div>
+
+      <button class="btn primary" (click)="loadOffer()" [disabled]="loading">
+        {{ loading ? 'Loading...' : 'Load offer' }}
+      </button>
+    </div>
+
+    <div class="status" *ngIf="statusMessage">
+      {{ statusMessage }}
+    </div>
+    <div class="status error" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+  </div>
+
+  <!-- Offer information -->
+  <div *ngIf="offer" class="card">
+    <h2 class="card-title">
+      Offer #{{ offer.id }}
+      <span *ngIf="!offer.isActive" class="badge inactive">(inactive)</span>
+    </h2>
+
+    <div class="offer-meta">
+      <div>
+        <div class="label">Offer owner</div>
+        <div class="value">
+          {{ offer.ownerNickname || '—' }}
+          <span class="sub">{{ offer.owner }}</span>
+        </div>
+        <div class="sub" *ngIf="offer.ownerCity">
+          City: {{ offer.ownerCity }}
+        </div>
+      </div>
+
+      <div *ngIf="offer.book" class="book-info">
+        <div class="label">Book in offer</div>
+        <div class="value">
+          "{{ offer.book.title }}" — {{ offer.book.author }}
+        </div>
+        <div class="sub">Genre: {{ offer.book.genre }}</div>
+        <div class="sub">Token ID: #{{ offer.book.id }}</div>
+      </div>
+    </div>
+
+    <div class="owner-controls" *ngIf="isOwner()">
+      <button
+        class="btn secondary"
+        (click)="cancelOffer()"
+        [disabled]="!offer.isActive"
+      >
+        Cancel offer
+      </button>
+    </div>
+  </div>
+
+  <!-- Propose swap (for NON-owner) -->
+  <div *ngIf="offer && !isOwner()" class="card">
+    <h2 class="card-title">Propose a swap</h2>
+    <p class="card-text">
+      Enter the ID of your book (NFT) to propose a mutual swap to the owner of
+      this offer.
+    </p>
+
+    <div class="field inline">
+      <label for="myBookId">My book ID</label>
+      <input
+        id="myBookId"
+        type="number"
+        [(ngModel)]="selectedMyBookId"
+        placeholder="For example: 2"
+      />
+    </div>
+
+    <button
+      class="btn primary"
+      (click)="sendRequest()"
+      [disabled]="!selectedMyBookId"
+    >
+      Send swap request
+    </button>
+  </div>
+
+  <!-- List of swap requests for this offer (for owner) -->
+  <div *ngIf="offer && isOwner()" class="card">
+    <h2 class="card-title">Swap requests</h2>
+
+    <div *ngIf="requests.length === 0" class="no-requests">
+      There are no swap requests yet.
+    </div>
+
+    <div *ngFor="let r of requests" class="request-row">
+      <div class="request-main">
+        <div class="label">Request #{{ r.id }}</div>
+        <div class="value">
+          From: {{ r.requesterNickname || '—' }}
+          <span class="sub">{{ r.requester }}</span>
+        </div>
+        <div class="sub" *ngIf="r.requesterCity">
+          City: {{ r.requesterCity }}
+        </div>
+      </div>
+
+      <div *ngIf="r.offeredBook" class="request-book">
+        <div class="label">Offered book</div>
+        <div class="value">
+          "{{ r.offeredBook.title }}" — {{ r.offeredBook.author }}
+        </div>
+        <div class="sub">
+          Genre: {{ r.offeredBook.genre }} | Token ID: #
+          {{ r.offeredBook.id }}
+        </div>
+      </div>
+
+      <div class="request-actions">
+        <span class="badge" *ngIf="!r.isPending">Closed</span>
+        <button
+          class="btn primary"
+          *ngIf="r.isPending"
+          (click)="acceptRequest(r)"
+        >
+          Accept swap
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

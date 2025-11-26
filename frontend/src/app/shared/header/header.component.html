@@ -1,0 +1,52 @@
+<header class="header">
+  <div class="header__left" (click)="go('/profile')">
+    <div class="logo-circle">B</div>
+    <div class="logo-text">
+      <div class="logo-title">BookSwap Club</div>
+      <div class="logo-subtitle">NFT book exchange</div>
+    </div>
+  </div>
+
+  <nav class="header__nav">
+  <button
+    class="nav-link"
+    routerLink="/profile"
+    routerLinkActive="nav-link--active"
+    [routerLinkActiveOptions]="{ exact: true }"
+  >
+    Profile
+  </button>
+
+  <button
+    class="nav-link"
+    routerLink="/books"
+    routerLinkActive="nav-link--active"
+  >
+    My books
+  </button>
+
+  <button
+    class="nav-link"
+    routerLink="/offers"
+    routerLinkActive="nav-link--active"
+  >
+    Offers
+  </button>
+</nav>
+
+  <div class="header__right">
+    <button
+      *ngIf="!currentAccount"
+      class="wallet-btn"
+      (click)="connectWallet()"
+      [disabled]="isConnecting"
+    >
+      {{ isConnecting ? 'Connecting...' : 'Connect wallet' }}
+    </button>
+
+    <div *ngIf="currentAccount" class="wallet-info">
+      <span class="wallet-label">Wallet:</span>
+      <span class="wallet-address">{{ shortAddress(currentAccount) }}</span>
+    </div>
+  </div>
+</header>

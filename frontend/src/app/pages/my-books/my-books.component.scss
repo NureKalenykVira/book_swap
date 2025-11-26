@@ -1,0 +1,211 @@
+.my-books-page {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+/* все як у profile */
+.page-title {
+  font-size: 26px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.card {
+  background: rgba(20, 20, 35, 0.95);
+  border-radius: 16px;
+  padding: 20px 24px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  margin-top: 35px;
+}
+
+.card-text {
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.btn {
+  border: none;
+  border-radius: 999px;
+  padding: 10px 25px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.btn.primary {
+  background: linear-gradient(135deg, #6a5acd, #42a5f5);
+  color: #fff;
+  font-weight: 600;
+}
+
+.btn.primary:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* форма додавання книжки — такі ж поля, як у профілі */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+label {
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+input,
+textarea {
+  background: rgba(10, 10, 20, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  padding: 8px 10px;
+  color: #f5f5f5;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+input:focus,
+textarea:focus {
+  border-color: #6a5acd;
+  box-shadow: 0 0 0 1px rgba(106, 90, 205, 0.5);
+}
+
+textarea {
+  min-height: 70px;
+  resize: vertical;
+}
+
+.status {
+  margin-top: 10px;
+  font-size: 13px;
+  opacity: 0.85;
+}
+
+.error {
+  font-size: 11px;
+  color: #ff6b6b;
+}
+
+/* список книжок */
+
+.books-card {
+  margin-top: 16px;
+}
+
+.books-list-empty {
+  font-size: 14px;
+  opacity: 0.85;
+}
+
+.books-grid {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.book-card {
+  background: rgba(20, 20, 35, 0.95);
+  border-radius: 12px;
+  padding: 12px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  margin-top: 10px;
+}
+
+.book-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.book-meta {
+  font-size: 13px;
+  opacity: 0.9;
+  margin-bottom: 4px;
+}
+
+.book-id {
+  font-size: 12px;
+  opacity: 0.75;
+  margin-bottom: 6px;
+}
+
+.book-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Список карток */
+.books-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Одна картка книги — дві колонки */
+.book-card {
+  display: flex;
+  gap: 16px;
+  align-items: stretch;
+}
+
+/* Ліва колонка: обкладинка, фіксована ширина */
+.book-card__cover {
+  flex: 0 0 110px; // ширина стовпчика з обкладинкою
+  display: flex;
+}
+
+/* Права колонка: контент */
+.book-card__content {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Блок з обкладинкою */
+.book-cover {
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: rgba(20, 20, 35, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Картинка обкладинки */
+.book-cover__img {
+  width: 100%;
+  height: 100%;
+  max-height: 180px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Плейсхолдер, якщо обкладинки немає */
+.book-cover--empty {
+  font-size: 0.8rem;
+  color: rgba(20, 20, 35, 0.95);
+  padding: 8px;
+  text-align: center;
+}
+
+/* Трошки адаптиву: на вузьких екранах картка стає в колонку */
+@media (max-width: 600px) {
+  .book-card {
+    flex-direction: column;
+  }
+
+  .book-card__cover {
+    flex: 0 0 auto;
+    max-width: 160px;
+  }
+}
+
