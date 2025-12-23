@@ -114,5 +114,3 @@ Additional features and UI improvements are planned:
 - extended user profile features
 - UX improvements
 - deployment to a public test network
-Vira Kalenyk
-GitHub: https://github.com/NureKalenykVira
